@@ -1,4 +1,5 @@
 import svelte from 'rollup-plugin-svelte';
+import alias from '@rollup/plugin-alias';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
@@ -6,6 +7,12 @@ import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 
 const production = !process.env.ROLLUP_WATCH;
+const aliases = alias({
+	resolve: ['.svelte', '.js'],
+	entries: [
+		{ find: 'components', 'replacement': './src/components' }
+	]
+})
 
 export default {
 	input: 'src/main.js',
@@ -16,6 +23,7 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		aliases,
 		postcss({
 			extract: true,
 		}),
